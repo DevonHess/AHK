@@ -14,6 +14,7 @@ nc := "A:\Software\nirsoft_package\NirSoft\nircmd.exe"
 		}
 	Return
 
+
 	; Vim commands
 	h::Left
 	j::Down
@@ -25,6 +26,7 @@ nc := "A:\Software\nirsoft_package\NirSoft\nircmd.exe"
 	a::End
 
 	; App launching
+
 	`;::
 		pro := "gvim.exe"
 		If WinExist("ahk_exe " . pro) {
@@ -40,8 +42,8 @@ nc := "A:\Software\nirsoft_package\NirSoft\nircmd.exe"
 
 	m::
 		WinGet, exe, ProcessPath, A
-		WinGetClass, class, A
-		WinActivateBottom, ahk_exe %exe% ahk_class %class%
+		WinGetClass, cla, A
+		WinActivateBottom, ahk_exe %exe% ahk_class %cla%
 	Return
 	
 	,::
@@ -186,19 +188,33 @@ nc := "A:\Software\nirsoft_package\NirSoft\nircmd.exe"
 	^WheelUp::
 		MouseGetPos,,,pos
   		WinGet, PID, PID, ahk_id %pos%
-		Run, %nc% changeappvolume /%PID% 0.02
+		Run, %nc% changeappvolume /%PID% 0.05
+		QSV()
 	Return
 
 	^WheelDown::
 		MouseGetPos,,,pos
   		WinGet, PID, PID, ahk_id %pos%
-		Run, %nc% changeappvolume /%PID% -0.02
+		Run, %nc% changeappvolume /%PID% -0.05
+		QSV()
 	Return
 
 	^MButton::
 		MouseGetPos,,,pos
   		WinGet, PID, PID, ahk_id %pos%
 		Run, %nc% muteappvolume /%PID% 2
+		QSV()
+	Return
+
+	QSV() {
+		If !WinExist("ahk_exe sndvol.exe") {
+			Run, sndvol.exe,, Max
+		}
+		SetTimer, CSV, -750
+	}
+
+	CSV:
+		WinClose, ahk_exe sndvol.exe
 	Return
 
 	; Turn off Screen
