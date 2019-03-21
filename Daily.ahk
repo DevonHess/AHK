@@ -5,7 +5,7 @@ nc := "A:\Software\nirsoft_package\NirSoft\nircmd.exe"
 *CapsLock::Return
 
 ; Check that Caps Lock is being held down
-#If GetKeyState("CapsLock","P")
+#If GetKeyState("CapsLock", "P")
 	Shift::
 		If GetKeyState("CapsLock", "T") {
 			SetCapsLockState, Off
@@ -120,7 +120,9 @@ nc := "A:\Software\nirsoft_package\NirSoft\nircmd.exe"
 		}
 	Return
 
-	p::
+	p::^+!#F1
+
+	d::
 		pro := "sndvol.exe"
 		If WinExist("ahk_exe " . pro) {
 			If WinActive() {
@@ -129,15 +131,13 @@ nc := "A:\Software\nirsoft_package\NirSoft\nircmd.exe"
 				WinActivate
 			}
 		} else {
-			Run, %pro%
+			Run, %pro%,, Max
 		}
 	Return
 
-	'::
-		SetTitleMatchMode, 2
+	NumpadSub::
 		WinGet, id, List,,, Program Manager
-		Loop, %id%
-		{
+		Loop, %id% {
 			this_id := id%A_Index%
 			WinActivate, ahk_id %this_id%
 			WinGetClass, this_class, ahk_id %this_id%
@@ -145,7 +145,6 @@ nc := "A:\Software\nirsoft_package\NirSoft\nircmd.exe"
 			MsgBox, 4, , Visiting All Windows`n%A_Index% of %id%`nahk_id %this_id%`nahk_class %this_class%`n%this_title%`n`nContinue?
 			IfMsgBox, NO, break
 		}
-		SetTitleMatchMode, 1
 	Return
 
 	; Media keys
@@ -179,38 +178,26 @@ nc := "A:\Software\nirsoft_package\NirSoft\nircmd.exe"
 	Return
 
 	; Adjust volume
-	WheelUp::
-		SendInput, {Volume_Up}
-		QSV()
-	Return
-	WheelDown::
-		SendInput, {Volume_Down}
-		QSV()
-	Return
-	MButton::
-		SendInput, {Volume_Mute}
-		QSV()
-	Return
+	WheelUp::Volume_Up
+	WheelDown::Volume_Down
+	MButton::Volume_Mute
 
 	f & WheelUp::
 		MouseGetPos,,,pos
   		WinGet, PID, PID, ahk_id %pos%
 		Run, %nc% changeappvolume /%PID% 0.05
-		QSV()
 	Return
 
 	f & WheelDown::
 		MouseGetPos,,,pos
   		WinGet, PID, PID, ahk_id %pos%
 		Run, %nc% changeappvolume /%PID% -0.05
-		QSV()
 	Return
 
 	f & MButton::
 		MouseGetPos,,,pos
   		WinGet, PID, PID, ahk_id %pos%
 		Run, %nc% muteappvolume /%PID% 2
-		QSV()
 	Return
 
 	QSV() {
@@ -254,25 +241,64 @@ nc := "A:\Software\nirsoft_package\NirSoft\nircmd.exe"
 #If
 
 #IfWinActive Minecraft ahk_exe javaw.exe
-	Numpad1::Send {x Down}{1 Down}
-	Numpad1 Up::Send {x Up}{1 Up}
-	Numpad2::Send {x Down}{2 Down}
-	Numpad2 Up::Send {x Up}{2 Up}
-	Numpad3::Send {x Down}{3 Down}
-	Numpad3 Up::Send {x Up}{3 Up}
-	Numpad4::Send {x Down}{4 Down}
-	Numpad4 Up::Send {x Up}{4 Up}
-	Numpad5::Send {x Down}{5 Down}
-	Numpad5 Up::Send {x Up}{5 Up}
-	Numpad6::Send {x Down}{6 Down}
-	Numpad6 Up::Send {x Up}{6 Up}
-	Numpad7::Send {x Down}{7 Down}
-	Numpad7 Up::Send {x Up}{7 Up}
-	Numpad8::Send {x Down}{8 Down}
-	Numpad8 Up::Send {x Up}{8 Up}
-	Numpad9::Send {x Down}{9 Down}
-	Numpad9 Up::Send {x Up}{9 Up}
-
-	Numpad0::Send {F3 Down}{N Down}
-	Numpad0 Up::Send {F3 Up}{N Up}
+	Numpad1::
+		SendInput, {x Down}{1 Down}
+		KeyWait, Numpad1
+		SendInput, {1 Up}{x Up}
+	Return
+	Numpad2::
+		SendInput, {x Down}{2 Down}
+		KeyWait, Numpad2
+		SendInput, {2 Up}{x Up}
+	Return
+	Numpad3::
+		SendInput, {x Down}{3 Down}
+		KeyWait, Numpad3
+		SendInput, {3 Up}{x Up}
+	Return
+	Numpad4::
+		SendInput, {x Down}{4 Down}
+		KeyWait, Numpad4
+		SendInput, {4 Up}{x Up}
+	Return
+	Numpad5::
+		SendInput, {x Down}{5 Down}
+		KeyWait, Numpad5
+		SendInput, {5 Up}{x Up}
+	Return
+	Numpad6::
+		SendInput, {x Down}{6 Down}
+		KeyWait, Numpad6
+		SendInput, {6 Up}{x Up}
+	Return
+	Numpad7::
+		SendInput, {x Down}{7 Down}
+		KeyWait, Numpad7
+		SendInput, {7 Up}{x Up}
+	Return
+	Numpad8::
+		SendInput, {x Down}{8 Down}
+		KeyWait, Numpad8
+		SendInput, {8 Up}{x Up}
+	Return
+	Numpad9::
+		SendInput, {x Down}{9 Down}
+		KeyWait, Numpad9
+		SendInput, {9 Up}{x Up}
+	Return
+	Numpad0::
+		SendInput, {F3 Down}{n Down}
+		KeyWait, Numpad0
+		SendInput, {F3 Up}{n Up}
+	Return
+	NumpadAdd::
+		SendInput, {F3 Down}{b Down}
+		KeyWait, NumpadAdd
+		SendInput, {F3 Up}{b Up}
+	Return
+	NumpadEnter::
+		SendInput, {F3 Down}{g Down}
+		KeyWait, NumpadEnter
+		SendInput, {F3 Up}{g Up}
+	Return
 #If
