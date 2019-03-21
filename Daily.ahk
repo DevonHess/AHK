@@ -50,7 +50,7 @@ nc := "A:\Software\nirsoft_package\NirSoft\nircmd.exe"
 		pro := "explorer.exe"
 		If WinExist("ahk_exe " . pro . " ahk_class CabinetWClass") {
 			If WinActive() {
-				Send, ^{tab}
+				SendInput, ^{tab}
 			} else {
 				WinActivate
 			}
@@ -63,7 +63,7 @@ nc := "A:\Software\nirsoft_package\NirSoft\nircmd.exe"
 		pro := "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"
 		If WinExist("ahk_exe " . pro) {
 			If WinActive() {
-				Send, ^{tab}
+				SendInput, ^{tab}
 			} else {
 				WinActivate
 			}
@@ -86,6 +86,15 @@ nc := "A:\Software\nirsoft_package\NirSoft\nircmd.exe"
 	Return
 
 	u::
+		SendInput, {LAlt Down}{Tab}
+	Return
+
+	u Up::
+		KeyWait, CapsLock
+		SendInput, {LAlt Up}
+	Return
+
+	i::
 		pro := "cmd.exe"
 		If WinExist("ahk_exe " . pro) {
 			If WinActive() {
@@ -98,24 +107,11 @@ nc := "A:\Software\nirsoft_package\NirSoft\nircmd.exe"
 		}
 	Return
 	
-	i::
+	o::
 		pro := "A:\Software\foobar2000\foobar2000.exe"
 		If WinExist("ahk_exe " . pro) {
 			If WinActive() {
 				WinMinimize
-			} else {
-				WinActivate
-			}
-		} else {
-			Run, %pro%
-		}
-	Return
-
-	o::
-		pro := "A:\Software\Keepass\Keepass.exe"
-		If WinExist("ahk_exe " . pro) {
-			If WinActive() {
-				WinClose
 			} else {
 				WinActivate
 			}
@@ -138,6 +134,7 @@ nc := "A:\Software\nirsoft_package\NirSoft\nircmd.exe"
 	Return
 
 	'::
+		SetTitleMatchMode, 2
 		WinGet, id, List,,, Program Manager
 		Loop, %id%
 		{
@@ -148,6 +145,7 @@ nc := "A:\Software\nirsoft_package\NirSoft\nircmd.exe"
 			MsgBox, 4, , Visiting All Windows`n%A_Index% of %id%`nahk_id %this_id%`nahk_class %this_class%`n%this_title%`n`nContinue?
 			IfMsgBox, NO, break
 		}
+		SetTitleMatchMode, 1
 	Return
 
 	; Media keys
@@ -181,25 +179,34 @@ nc := "A:\Software\nirsoft_package\NirSoft\nircmd.exe"
 	Return
 
 	; Adjust volume
-	WheelUp::Volume_Up
-	WheelDown::Volume_Down
-	MButton::Volume_Mute
+	WheelUp::
+		SendInput, {Volume_Up}
+		QSV()
+	Return
+	WheelDown::
+		SendInput, {Volume_Down}
+		QSV()
+	Return
+	MButton::
+		SendInput, {Volume_Mute}
+		QSV()
+	Return
 
-	^WheelUp::
+	f & WheelUp::
 		MouseGetPos,,,pos
   		WinGet, PID, PID, ahk_id %pos%
 		Run, %nc% changeappvolume /%PID% 0.05
 		QSV()
 	Return
 
-	^WheelDown::
+	f & WheelDown::
 		MouseGetPos,,,pos
   		WinGet, PID, PID, ahk_id %pos%
 		Run, %nc% changeappvolume /%PID% -0.05
 		QSV()
 	Return
 
-	^MButton::
+	f & MButton::
 		MouseGetPos,,,pos
   		WinGet, PID, PID, ahk_id %pos%
 		Run, %nc% muteappvolume /%PID% 2
