@@ -4,7 +4,7 @@ SetCapsLockState, AlwaysOff
 df := "C:\Program Files (x86)\DisplayFusion\DisplayFusionCommand.exe" 
 nc := "A:\Software\nirsoft_package\NirSoft\nircmd.exe"
 
-CapsLock & Shift::
+CapsLock & Enter::
 	If GetKeyState("CapsLock", "T") {
 		SetCapsLockState, AlwaysOff 
 	} Else {
@@ -118,7 +118,15 @@ CapsLock & s::
 	WinClose, ahk_exe sndvol.exe
 Return
 
-CapsLock & d::Return
+CapsLock & d::
+	pro := "sndvol.exe"
+	pos := % A_ScreenHeight * 65536
+	Run, %pro% -m %pos%
+	WinWait, ahk_exe sndvol.exe
+	WinMove, ahk_exe sndvol.exe,,,, %A_ScreenWidth%
+	KeyWait, d
+	WinClose, ahk_exe sndvol.exe
+Return
 
 CapsLock & f::
 	pro := "explorer.exe"
@@ -138,6 +146,7 @@ CapsLock & g::
 	If WinActive("ahk_class #32770") {
 		ControlGetText, loc, ToolbarWindow323, ahk_exe explorer.exe ahk_class CabinetWClass
 		loc := StrReplace(loc, "Address: ")
+		ControlFocus, Edit1
 		SendInput,!d^a{Text}%loc%
 		SendInput, {Enter}
 	}
@@ -165,7 +174,7 @@ Return
 
 ; Active window kill task
 CapsLock & z::
-	WinGet, pro, ProcessPath, A
+	WinGet, pro, ProcessName, A
 	if (pro != "explorer.exe") {
 		WinGet, PID, PID, A
 		Run, Taskkill /PID %PID% /F /T,, Hide
@@ -178,9 +187,9 @@ CapsLock & c::
 	If WinExist(" - YouTube - Google Chrome") {
 		ControlFocus
 		ControlSend,, k
-	;} Else If WinExist("ahk_exe foobar200.exe") {
-	;	ControlFocus
-	;	ControlSend,, {Media_Play_Pause}
+	} Else If WinExist("ahk_exe mpv.exe") {
+		ControlFocus
+		ControlSend,, {Space}
 	} else {
 		;ControlFocus,, - Google Chrome
 		;ControlSend,, {Space}, - Google Chrome

@@ -1,6 +1,5 @@
 #MaxHotkeysPerInterval 200
-AutoTrim, Off
-DetectHiddenWindows, On
+SetCapsLockState, AlwaysOff 
 
 ; Caps Lock sent through double press
 *CapsLock::			

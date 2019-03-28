@@ -8,26 +8,24 @@ Loop
 {
 	While (autoclick = true)
 	{
-		GetKeyState, test, LButton
-		if (test = "U")
+		If !GetKeyState("LButton")
 		{
 			ToolTip, x, %cx%, %cy%
 			ControlClick, x%cx% y%cy%, ahk_id %win%,,,, NA
-			SetTimer, RemoveToolTip, -100
 		}
 	}
 }
 
 XButton1::
 	autoclick := !autoclick
+	ToolTip
 Return
 
 XButton2::
+	While GetKeyState("XButton2", "P") {
+		MouseGetPos, cx, cy
+		ToolTip, x, %cx%, %cy%
+	}
 	MouseGetPos, cx, cy, win
-	ToolTip, x, %cx%, %cy%
-	SetTimer, RemoveToolTip, -1000
-Return
-
-RemoveToolTip:
-	ToolTip,,,, 1
+	ToolTip
 Return
