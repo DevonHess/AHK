@@ -182,10 +182,11 @@ CapsLock & z::
 Return
 
 CapsLock & x::
-	WinGet, PID, PID, A
-	WinMinimize, ahk_pid %PID%
+	WinGet, ID, ID, A
+	WinMinimize, ahk_id %ID%
 	KeyWait, x
-	WinRestore, ahk_pid %PID%
+	WinRestore, ahk_id %ID%
+	WinActivate, ahk_id %ID%
 Return
 
 CapsLock & c::
