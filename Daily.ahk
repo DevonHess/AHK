@@ -120,7 +120,7 @@ Return
 
 CapsLock & d::
 	pro := "sndvol.exe"
-	pos := % A_ScreenHeight * 65536
+	;pos := % A_ScreenHeight * 65536
 	Run, %pro% -m %pos%
 	WinWait, ahk_exe sndvol.exe
 	WinMove, ahk_exe sndvol.exe,,,, %A_ScreenWidth%
@@ -181,7 +181,12 @@ CapsLock & z::
 	}
 Return
 
-CapsLock & x::Return
+CapsLock & x::
+	WinGet, PID, PID, A
+	WinMinimize, ahk_pid %PID%
+	KeyWait, x
+	WinRestore, ahk_pid %PID%
+Return
 
 CapsLock & c::
 	If WinExist(" - YouTube - Google Chrome") {
@@ -275,11 +280,11 @@ CapsLock & F12::F24
 
 CapsLock & Esc::Suspend
 
-#IfWinActive ahk_class Vim
+#If WinActive("ahk_class Vim")
        CapsLock::Escape
 #If
 
-#IfWinActive Minecraft ahk_exe javaw.exe
+#If WinActive("Minecraft ahk_exe javaw.exe")
 	Numpad1::
 		SendInput, {x Down}{1 Down}
 		KeyWait, Numpad1
