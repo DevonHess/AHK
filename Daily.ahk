@@ -210,8 +210,7 @@ Return
 
 CapsLock & b::
 	WinGet, exe, ProcessPath, A
-	exe := RegExReplace(exe, "(.+)\\.*", "$1\")
-	Run, explorer.exe "%exe%"
+	Run, explorer.exe /select`,"%exe%"
 Return
 
 
