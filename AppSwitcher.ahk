@@ -9,5 +9,5 @@ If WinExist("ahk_exe " . pro) {
 		WinActivate
 	}
 } else {
-	Run, %pro%, % RegExReplace(pro, "(.+)//.+", "$1")
+	Run, %pro%, % SubStr(pro, 1, InStr(pro, "\" ,, 0))
 }
