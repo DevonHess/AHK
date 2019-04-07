@@ -1,5 +1,5 @@
-﻿#NoEnv
-SendMode Input
+﻿#NoTrayIcon
+#NoEnv
 
 pro :=  % A_Args[1]
 If WinExist("ahk_exe " . pro) {
